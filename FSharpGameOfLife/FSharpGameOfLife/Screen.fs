@@ -1,6 +1,8 @@
 ﻿namespace FSharpGameOfLife
 
 open System
+open Microsoft.FSharp.Reflection
+open Patterns
 
 module Screen =
 
@@ -30,15 +32,45 @@ module Screen =
         writeLineInColor ConsoleColor.Magenta "F#"
         writeLineInColor ConsoleColor.DarkCyan "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         newLine ()
-        writeLineInColor ConsoleColor.DarkCyan "Please select a life pattern below by entering the number:"
+
+    let showOption option =
+        
+        let a, b, c = option
+        let num = ((string a).PadLeft 2) + ". "
+        let name = (string b).PadRight 15
+        let group = (string c)
+
+        writeInColor ConsoleColor.DarkCyan (Printf.StringFormat<unit, unit> num)
+        writeInColor ConsoleColor.Cyan (Printf.StringFormat<unit, unit> name)
+        writeInColor ConsoleColor.DarkCyan (Printf.StringFormat<unit, unit> group)
         newLine ()
-        writeInColor ConsoleColor.DarkCyan "1.  "
-        writeLineInColor ConsoleColor.Cyan "Block"
-        writeInColor ConsoleColor.DarkCyan "2.  "
-        writeLineInColor ConsoleColor.Cyan "Beehive"
+
+    let showOptions () =
+        
+//        let cases = FSharpType.GetUnionCases typeof<Pattern>
+//        
+//        for case in cases do
+//            let x = System.Type.GetType case.Name
+//
+//            showOption (menuItem x)
+        
+        writeLineInColor ConsoleColor.DarkCyan "Available Patterns:"
+        newLine ()
+        showOption (menuItem Block)
+        showOption (menuItem Beehive)
+        showOption (menuItem Loaf)
+        showOption (menuItem Boat)
+        showOption (menuItem Blinker)
+        showOption (menuItem Toad)
+        showOption (menuItem Beacon)
+        showOption (menuItem Pulsar)
+        showOption (menuItem Glider)
+        showOption (menuItem Lightweight)
+        newLine ()
+        writeLineInColor ConsoleColor.DarkCyan "To add a pattern to the board, enter its number and coordinates (# X Y)."
         newLine ()
 
     let prompt () =
         
-        writeInColor ConsoleColor.Magenta "->  "
+        writeInColor ConsoleColor.Magenta "=>  "
         Console.ReadLine()

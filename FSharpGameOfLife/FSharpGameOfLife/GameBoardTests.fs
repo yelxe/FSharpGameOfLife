@@ -5,24 +5,37 @@ open FsUnit
 open GameBoard
 open Patterns
 
-module ``T:GameBoard`` =
+module ``|GameBoard`` =
 
-    module ``addToBoard`` =
+    module ``createFor`` =
         
         [<Test>]
-        let ``Should Return a Board That Matches the Pattern``() =
-            addToBoard [] Block |> should equal [(0, 0); (0, 1); (1, 0); (1, 1)]
+        let ``Should Create a Grid of 10 by 10`` () =
+            List.length (createFor 10 10) |> should equal 100
 
-        [<Test>]
-        let ``Should Return a Board With Two Patterns`` () =
-            addToBoard [(5, 5); (5, 6)] Block |> should equal [(0, 0); (0, 1); (1, 0); (1, 1); (5, 5); (5, 6)]
-
-    module ``staggerPattern`` =
+    module ``addTo`` =
         
         [<Test>]
-        let ``Should Return Staggered Block`` () =
-            staggerPattern Block (2, 2) |> should equal [(2, 2); (2, 3); (3, 2); (3, 3)]
-
-        [<Test>]
-        let ``Should Return Staggered Beehive`` () =
-            staggerPattern Beehive (2, 2) |> should equal [(2, 3); (2, 4); (3, 2); (3, 5); (4, 3); (4, 4)]
+        let ``Should Return a Board With a Block Pattern`` () =
+            
+            let board = createFor 3 3
+            addTo board (basePattern Block) |> should equal
+                [
+                    (0, 0, true);   (0, 1, true);   (0, 2, false);
+                    (1, 0, true);   (1, 1, true);   (1, 2, false);
+                    (2, 0, false);  (2, 1, false);  (2, 2, false)
+                ]
+                
+    module ``evolve`` =
+        
+        module ``Block Pattern`` =
+            
+            [<Test>]
+            let ``Should Remain a Block Pattern`` () =
+                let board = addTo (createFor 3 3) (basePattern Block)
+                evolve board 5 |> should equal
+                    [
+                        (0, 0, true);   (0, 1, true);   (0, 2, false);
+                        (1, 0, true);   (1, 1, true);   (1, 2, false);
+                        (2, 0, false);  (2, 1, false);  (2, 2, false)
+                    ]

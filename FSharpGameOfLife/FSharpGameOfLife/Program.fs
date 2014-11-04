@@ -8,5 +8,7 @@ module Programs =
     let main argv = 
         
         showStart ()
+        showOptions ()
+
         let response = prompt ()
         0
