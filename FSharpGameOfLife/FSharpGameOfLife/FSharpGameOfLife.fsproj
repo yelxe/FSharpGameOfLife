@@ -58,6 +58,7 @@
     <Compile Include="Patterns.fs" />
     <Compile Include="GameBoard.fs" />
     <Compile Include="GameBoardTests.fs" />
+    <Compile Include="Constants.fs" />
     <Compile Include="Screen.fs" />
     <Compile Include="Program.fs" />
     <Content Include="packages.config" />

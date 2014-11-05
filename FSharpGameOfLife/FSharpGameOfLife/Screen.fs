@@ -1,8 +1,9 @@
 ﻿namespace FSharpGameOfLife
 
 open System
-open Microsoft.FSharp.Reflection
+open Constants
 open Patterns
+open GameBoard
 
 module Screen =
 
@@ -24,13 +25,25 @@ module Screen =
         printfn ""
 
     let newLine () =
+        
         printfn ""
+
+    let prompt () =
+        
+        writeInColor ConsoleColor.Magenta "=>  "
+        Console.ReadLine()
 
     let showStart () =
         
+        Console.Clear ()
+        newLine ()
         writeInColor ConsoleColor.Cyan "Welcome to The Game of Life in "
         writeLineInColor ConsoleColor.Magenta "F#"
-        writeLineInColor ConsoleColor.DarkCyan "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        writeLineInColor ConsoleColor.DarkCyan "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        newLine ()
+        writeLineInColor ConsoleColor.DarkCyan "This console application was part of a jouney to learn the ways of the F#rce."
+        newLine ()
+        writeLineInColor ConsoleColor.Cyan "Press ENTER to proceed."
         newLine ()
 
     let showOption option =
@@ -47,15 +60,6 @@ module Screen =
 
     let showOptions () =
         
-//        let cases = FSharpType.GetUnionCases typeof<Pattern>
-//        
-//        for case in cases do
-//            let x = System.Type.GetType case.Name
-//
-//            showOption (menuItem x)
-        
-        writeLineInColor ConsoleColor.DarkCyan "Available Patterns:"
-        newLine ()
         showOption (menuItem Block)
         showOption (menuItem Beehive)
         showOption (menuItem Loaf)
@@ -66,11 +70,69 @@ module Screen =
         showOption (menuItem Pulsar)
         showOption (menuItem Glider)
         showOption (menuItem Lightweight)
+        
+    let showAdd () =
+        
+        Console.Clear ()
+        newLine ()
+        writeLineInColor ConsoleColor.Cyan "Add a Pattern"
+        writeLineInColor ConsoleColor.DarkCyan "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        newLine ()
+        showOptions ()
         newLine ()
         writeLineInColor ConsoleColor.DarkCyan "To add a pattern to the board, enter its number and coordinates (# X Y)."
+        writeLineInColor ConsoleColor.DarkCyan "To add an individual cell, enter its coordinates (X Y)."
         newLine ()
 
-    let prompt () =
+    let printRow board x =
+
+        board
+            |> List.filter
+            (
+                fun (a, b, c) ->
+                (a = x)
+            )
+            |> List.map
+            (
+                fun (a, b, c) ->
+                if c = true
+                then writeInColor ConsoleColor.Cyan "@" 
+                else writeInColor ConsoleColor.DarkMagenta "+"
+            )
+            |> ignore
         
-        writeInColor ConsoleColor.Magenta "=>  "
-        Console.ReadLine()
+        newLine ()
+
+    
+    let showBoard (board:List<int * int * bool>) =
+        
+        Console.Clear ()
+        
+        for i in [0..(rows board)] do
+            printRow board i
+        
+        newLine ()
+        writeInColor ConsoleColor.DarkCyan "Options: "
+        writeInColor ConsoleColor.Cyan "ENTER"
+        writeInColor ConsoleColor.DarkCyan " = Evolve | "
+        writeInColor ConsoleColor.Cyan "A"
+        writeInColor ConsoleColor.DarkCyan " = Add Pattern | "
+        writeInColor ConsoleColor.Cyan "C"
+        writeInColor ConsoleColor.DarkCyan " = Clear Board | "
+        writeInColor ConsoleColor.Cyan "Q"
+        writeInColor ConsoleColor.DarkCyan " = Quit"
+        newLine ()
+        newLine ()
+
+    let showView () =
+        
+        let mutable x = 0
+
+        Console.Clear ()
+        writeLineInColor ConsoleColor.Red (Printf.StringFormat<unit, unit> message)
+        newLine ()
+        
+        for i = 0 to 35 do
+            writeLineInColor ConsoleColor.Red (Printf.StringFormat<unit, unit> persistantMessage)
+
+        newLine ()

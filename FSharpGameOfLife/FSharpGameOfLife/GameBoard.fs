@@ -1,9 +1,17 @@
 ﻿namespace FSharpGameOfLife
 
-open Patterns
-
 module GameBoard =
     
+    let rows board =
+        
+        let x, y, z = List.maxBy (fun (x, y, z) -> x) board
+        x
+
+    let cols board =
+
+        let x, y, z = List.maxBy (fun (x, y, z) -> y) board
+        y
+
     let createFor rows columns =
         
         [for x in 0..(rows - 1) do for y in 0..(columns - 1) -> (x, y, false)]
@@ -18,6 +26,16 @@ module GameBoard =
                     else (x, y, z)
             )
         
+    let addCellTo board xy =
+        
+        let a, b = xy
+
+        board |> List.map
+            (
+                fun (x, y, z) ->
+                if x = a && y = b then (x, y, true) else (x, y, z)
+            )
+
     let livingNeighbours (x, y, z) board =
         
         board |> List.filter

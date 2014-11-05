@@ -60,7 +60,7 @@ module Patterns =
                             ]                                                                   // Stagger (1, 1) to persist
         
         // Spaceships
-        | Glider ->         [   ( 0,  2); ( 1,  0); ( 1,  2); ( 2,  1); ( 2,  2)]               // Stagger?
+        | Glider ->         [   ( 0,  2); ( 1,  0); ( 1,  2); ( 2,  1); ( 2,  2)]
         | Lightweight ->    [
                                 ( 0,  1); ( 0,  2); ( 0,  3);
                                 ( 0,  4); ( 1,  0); ( 1,  4);
