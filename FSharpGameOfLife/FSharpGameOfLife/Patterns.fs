@@ -17,16 +17,16 @@ module Patterns =
     let menuItem pattern =
         
         match pattern with
-        | Block ->          (1, "Block", "Still Life")
-        | Beehive ->        (2, "Beehive", "Still Life")
-        | Loaf ->           (3, "Loaf", "Still Life")
-        | Boat ->           (4, "Boat", "Still Life")
-        | Blinker ->        (5, "Blinker", "Oscillator")
-        | Toad ->           (6, "Toad", "Oscillator")
-        | Beacon ->         (7, "Beacon", "Oscillator")
-        | Pulsar ->         (8, "Pulsar", "Oscillator")
-        | Glider ->         (9, "Glider", "Spaceship")
-        | Lightweight ->    (10, "Lightweight", "Spaceship")
+        | Block ->          (   01,    "Block",        "Still Life" )
+        | Beehive ->        (   02,    "Beehive",      "Still Life" )
+        | Loaf ->           (   03,    "Loaf",         "Still Life" )
+        | Boat ->           (   04,    "Boat",         "Still Life" )
+        | Blinker ->        (   05,    "Blinker",      "Oscillator" )
+        | Toad ->           (   06,    "Toad",         "Oscillator" )
+        | Beacon ->         (   07,    "Beacon",       "Oscillator" )
+        | Pulsar ->         (   08,    "Pulsar",       "Oscillator" )
+        | Glider ->         (   09,    "Glider",       "Spaceship"  )
+        | Lightweight ->    (   10,    "Lightweight",  "Spaceship"  )
 
     let basePattern pattern =
         

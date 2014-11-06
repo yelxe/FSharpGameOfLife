@@ -21,9 +21,9 @@ module ``? GameBoard`` =
             let board = createFor 3 3
             addTo board (basePattern Block) |> should equal
                 [
-                    (0, 0, true);   (0, 1, true);   (0, 2, false);
-                    (1, 0, true);   (1, 1, true);   (1, 2, false);
-                    (2, 0, false);  (2, 1, false);  (2, 2, false);
+                    (00, 00, true );   (00, 01, true );    (00, 02, false);
+                    (01, 00, true );   (01, 01, true );    (01, 02, false);
+                    (02, 00, false);   (02, 01, false);    (02, 02, false);
                 ]
         
         [<Test>]

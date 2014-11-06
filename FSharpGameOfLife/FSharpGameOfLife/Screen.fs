@@ -1,27 +1,47 @@
 ﻿namespace FSharpGameOfLife
 
 open System
+open Microsoft.FSharp.Collections
+open Microsoft.FSharp.Reflection
 open Constants
 open Patterns
 open GameBoard
 
 module Screen =
 
-    let writeInColor c fmt = 
+    let writeInColor c str = 
+        
+        let fmt = Printf.StringFormat<unit, unit> str
 
         Printf.kprintf 
-            (fun s -> 
+            (
+                fun s -> 
                 let old = System.Console.ForegroundColor 
                 try 
-                  System.Console.ForegroundColor <- c;
-                  System.Console.Write s
+                    System.Console.ForegroundColor <- c;
+                    System.Console.Write s
                 finally
-                  System.Console.ForegroundColor <- old) 
+                    System.Console.ForegroundColor <- old
+            ) 
             fmt
         
-    let writeLineInColor c fmt = 
+    let writeLineInColor c str = 
         
-        writeInColor c fmt
+        writeInColor c str
+        printfn ""
+
+    let writeLineInDualColor c1 c2 str =
+        
+        str
+            |> List.mapi
+            (
+                fun i  x ->
+                if i % 2 = 0
+                    then writeInColor c1 x
+                    else writeInColor c2 x
+            )
+            |> ignore
+            
         printfn ""
 
     let newLine () =
@@ -30,32 +50,49 @@ module Screen =
 
     let prompt () =
         
-        writeInColor ConsoleColor.Magenta "=>  "
+        writeInColor ConsoleColor.Magenta "|> "
         Console.ReadLine()
 
     let showStart () =
         
         Console.Clear ()
         newLine ()
-        writeInColor ConsoleColor.Cyan "Welcome to The Game of Life in "
-        writeLineInColor ConsoleColor.Magenta "F#"
+        newLine ()
+        writeLineInDualColor ConsoleColor.Cyan ConsoleColor.DarkCyan ["Welcome to Conway's Game of Life ";"(Windows Console Edition)"]
+        newLine ()
         writeLineInColor ConsoleColor.DarkCyan "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         newLine ()
-        writeLineInColor ConsoleColor.DarkCyan "This console application was part of a jouney to learn the ways of the F#rce."
+        
+        writeLineInColor ConsoleColor.Magenta                               "         ########      ###   ###      "
+        writeLineInColor ConsoleColor.Magenta                               "         ########      ###   ###      "
+        writeLineInDualColor ConsoleColor.Magenta ConsoleColor.DarkCyan [   "         ###        ###############   ";"    Special Thanks To:             "   ]
+        writeLineInDualColor ConsoleColor.Magenta ConsoleColor.DarkCyan [   "         ###        ###############   ";"                                   "   ]
+        writeLineInDualColor ConsoleColor.Magenta ConsoleColor.Cyan     [   "         #######       ###   ###      ";"    F# for fun and profit          "   ]
+        writeLineInDualColor ConsoleColor.Magenta ConsoleColor.DarkCyan [   "         #######       ###   ###      ";"    www.fsharpforfunandprofit.com  "   ]
+        writeLineInDualColor ConsoleColor.Magenta ConsoleColor.DarkCyan [   "         ###        ###############   ";"                                   "   ]
+        writeLineInDualColor ConsoleColor.Magenta ConsoleColor.Cyan     [   "         ###        ###############   ";"    \"An oustanding resource!\"    "   ]
+        writeLineInColor ConsoleColor.Magenta                               "         ###           ###   ###      "
+        writeLineInColor ConsoleColor.Magenta                               "         ###           ###   ###      "
         newLine ()
-        writeLineInColor ConsoleColor.Cyan "Press ENTER to proceed."
+        newLine ()
+        writeLineInColor ConsoleColor.DarkCyan "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        newLine ()
+
+        newLine ()
+        newLine ()
+        writeLineInDualColor ConsoleColor.DarkCyan ConsoleColor.Cyan ["Please press ";"ENTER";" to begin."]
         newLine ()
 
     let showOption option =
         
         let a, b, c = option
-        let num = ((string a).PadLeft 2) + ". "
+        let num = ((string a).PadLeft 3) + ". "
         let name = (string b).PadRight 15
         let group = (string c)
 
-        writeInColor ConsoleColor.DarkCyan (Printf.StringFormat<unit, unit> num)
-        writeInColor ConsoleColor.Cyan (Printf.StringFormat<unit, unit> name)
-        writeInColor ConsoleColor.DarkCyan (Printf.StringFormat<unit, unit> group)
+        writeInColor ConsoleColor.DarkCyan num
+        writeInColor ConsoleColor.Cyan name
+        writeInColor ConsoleColor.DarkCyan group
         newLine ()
 
     let showOptions () =
@@ -75,13 +112,16 @@ module Screen =
         
         Console.Clear ()
         newLine ()
-        writeLineInColor ConsoleColor.Cyan "Add a Pattern"
-        writeLineInColor ConsoleColor.DarkCyan "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        writeLineInColor ConsoleColor.Cyan "Add a Pattern to the Board"
+        newLine ()
+        writeLineInColor ConsoleColor.DarkMagenta "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         newLine ()
         showOptions ()
         newLine ()
-        writeLineInColor ConsoleColor.DarkCyan "To add a pattern to the board, enter its number and coordinates (# X Y)."
-        writeLineInColor ConsoleColor.DarkCyan "To add an individual cell, enter its coordinates (X Y)."
+        writeLineInColor ConsoleColor.DarkMagenta "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        newLine ()
+        writeLineInDualColor ConsoleColor.DarkCyan ConsoleColor.Cyan ["To add a pattern to the board, enter its number and coordinates:  ";"# x y"]
+        writeLineInDualColor ConsoleColor.DarkCyan ConsoleColor.Cyan ["To add an individual cell to the board, enter its coordinates:    ";"x y  "]
         newLine ()
 
     let printRow board x =
@@ -96,8 +136,8 @@ module Screen =
             (
                 fun (a, b, c) ->
                 if c = true
-                then writeInColor ConsoleColor.Cyan "@" 
-                else writeInColor ConsoleColor.DarkMagenta "+"
+                    then writeInColor ConsoleColor.Cyan "@" 
+                    else writeInColor ConsoleColor.DarkMagenta "+"
             )
             |> ignore
         
@@ -112,16 +152,12 @@ module Screen =
             printRow board i
         
         newLine ()
-        writeInColor ConsoleColor.DarkCyan "Options: "
-        writeInColor ConsoleColor.Cyan "ENTER"
-        writeInColor ConsoleColor.DarkCyan " = Evolve | "
-        writeInColor ConsoleColor.Cyan "A"
-        writeInColor ConsoleColor.DarkCyan " = Add Pattern | "
-        writeInColor ConsoleColor.Cyan "C"
-        writeInColor ConsoleColor.DarkCyan " = Clear Board | "
-        writeInColor ConsoleColor.Cyan "Q"
-        writeInColor ConsoleColor.DarkCyan " = Quit"
-        newLine ()
+        
+        writeLineInDualColor
+            ConsoleColor.DarkCyan
+            ConsoleColor.Cyan
+            ["| ";"ENTER";" = Evolve | ";"N";" = Evolve N | ";"A";" = Add Pattern | ";"C";" = Clear Board | ";"Q";" = Quit |"]
+
         newLine ()
 
     let showView () =
@@ -129,10 +165,10 @@ module Screen =
         let mutable x = 0
 
         Console.Clear ()
-        writeLineInColor ConsoleColor.Red (Printf.StringFormat<unit, unit> message)
+        writeLineInColor ConsoleColor.DarkGray message
         newLine ()
         
         for i = 0 to 35 do
-            writeLineInColor ConsoleColor.Red (Printf.StringFormat<unit, unit> persistantMessage)
+            writeLineInColor ConsoleColor.Gray persistantMessage
 
         newLine ()

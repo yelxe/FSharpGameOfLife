@@ -13,17 +13,31 @@ module Program =
 
     let choosePattern board num x y =
         match num with
-        | 1 ->  addTo board (staggeredPattern Block (x, y))
-        | 2 ->  addTo board (staggeredPattern Beehive (x, y))
-        | 3 ->  addTo board (staggeredPattern Loaf (x, y))
-        | 4 ->  addTo board (staggeredPattern Boat (x, y))
-        | 5 ->  addTo board (staggeredPattern Blinker (x, y))
-        | 6 ->  addTo board (staggeredPattern Toad (x, y))
-        | 7 ->  addTo board (staggeredPattern Beacon (x, y))
-        | 8 ->  addTo board (staggeredPattern Pulsar (x, y))
-        | 9 ->  addTo board (staggeredPattern Glider (x, y))
-        | 10 -> addTo board (staggeredPattern Lightweight (x, y))
-        | a ->  board
+        | 1     ->  addTo board (staggeredPattern Block (x, y))
+        | 2     ->  addTo board (staggeredPattern Beehive (x, y))
+        | 3     ->  addTo board (staggeredPattern Loaf (x, y))
+        | 4     ->  addTo board (staggeredPattern Boat (x, y))
+        | 5     ->  addTo board (staggeredPattern Blinker (x, y))
+        | 6     ->  addTo board (staggeredPattern Toad (x, y))
+        | 7     ->  addTo board (staggeredPattern Beacon (x, y))
+        | 8     ->  addTo board (staggeredPattern Pulsar (x, y))
+        | 9     ->  addTo board (staggeredPattern Glider (x, y))
+        | 10    ->  addTo board (staggeredPattern Lightweight (x, y))
+        | a     ->  board
+
+    let parseStringToIntWithLimit x =
+        
+        let b, i = Int32.TryParse x
+        if b = true
+        then
+            if i > 20 then 0 else i
+        else 1
+        
+    let cleanAddArguments (resp:string) =
+        
+        let args = resp.Split ' '
+        let largs = (List.ofArray args) |> List.map (fun x -> if fst (Int32.TryParse x) = true then x else "")
+        largs
 
     let doStart () =
             
@@ -46,7 +60,9 @@ module Program =
         showAdd ()
         response <- prompt ()
 
-        let args = response.Split ' '
+        let args = cleanAddArguments response
+
+        // TODO: Error Handling for non-integers...
 
         if args.Length = 3 then
             board <- choosePattern board (int (args.[0])) (int (args.[1])) (int (args.[2]))
@@ -88,16 +104,16 @@ module Program =
         response <- doBoard ()
 
         while response <> "Q" do
-            if response = lowerKey || response = upperKey then
+            let rnd = new Random()
+            if response.ToUpper () = longKey || response.ToUpper () = shortKey || (rnd.Next 50) = 0 then
                 response <- doView()
             else
                 response <-
-                    match response with
-                    | "o" | "O" -> doOptions ()
-                    | "a" | "A" -> doAdd ()
-                    | "c" | "C" -> doClear ()
-                    | "q" | "Q" -> doQuit ()
-                    | a         -> doEvolve 1
+                    match response.ToUpper () with
+                    | "A"   -> doAdd ()
+                    | "C"   -> doClear ()
+                    | "Q"   -> doQuit ()
+                    | a     -> doEvolve (parseStringToIntWithLimit a)
 
         0
 
