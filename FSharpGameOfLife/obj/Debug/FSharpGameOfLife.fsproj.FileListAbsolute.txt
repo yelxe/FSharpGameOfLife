@@ -31,3 +31,14 @@ F:\Excercises\FSharpGameOfLife\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FsUni
 F:\Excercises\FSharpGameOfLife\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\nunit.framework.dll
 F:\Excercises\FSharpGameOfLife\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FSharp.Core.xml
 F:\Excercises\FSharpGameOfLife\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\nunit.framework.xml
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FSharpGameOfLife.exe.config
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FSharpGameOfLife.XML
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FSharpGameOfLife.exe
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FSharpGameOfLife.pdb
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FSharp.Core.dll
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FsUnit.NUnit.dll
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\nunit.framework.dll
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\FSharp.Core.xml
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\bin\Debug\nunit.framework.xml
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\obj\Debug\FSharpGameOfLife.exe
+C:\Me\Workspace\Git\FSharpGameOfLife\FSharpGameOfLife\obj\Debug\FSharpGameOfLife.pdb
