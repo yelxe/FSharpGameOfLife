@@ -2,7 +2,9 @@
 
 module Patterns =
     
-    type Pattern =
+    type Pattern = (int * int) list
+
+    type PatternExamples =
         | Block
         | Beehive
         | Loaf
@@ -13,6 +15,11 @@ module Patterns =
         | Pulsar
         | Glider
         | Lightweight
+
+    type Behaviour =
+        | StillLife
+        | Oscillator
+        | Spaceship
 
     let menuItem pattern =
         
@@ -28,9 +35,9 @@ module Patterns =
         | Glider ->         (   09,    "Glider",       "Spaceship"  )
         | Lightweight ->    (   10,    "Lightweight",  "Spaceship"  )
 
-    let basePattern pattern =
+    let toPattern example =
         
-        match pattern with
+        match example with
         
         // Still Life
         | Block ->          [   ( 0,  0); ( 0,  1); ( 1,  0); ( 1,  1)]
@@ -67,5 +74,7 @@ module Patterns =
                                 ( 2,  4); ( 3,  0); ( 3,  3)
                             ]                                                                   // Stagger (0, 1) to persist
 
-    let staggeredPattern pattern (x, y) =
-        basePattern pattern |> List.map (fun (a, b) -> a + x, b + y)
+    let adjustTo (x, y) pattern = 
+        let sumCoordinates = (fun (a, b) -> a + x, b + y)
+        pattern |> List.map sumCoordinates
+

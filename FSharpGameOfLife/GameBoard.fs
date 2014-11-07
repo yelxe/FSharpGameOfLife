@@ -1,74 +1,50 @@
 ﻿namespace FSharpGameOfLife
 
+
 module GameBoard =
-    
-    let rows board =
-        
-        let x, y, z = List.maxBy (fun (x, y, z) -> x) board
-        x
 
-    let cols board =
+    let snd' (x, y, z) = y
+    let fst' (x, y, z) = x
 
-        let x, y, z = List.maxBy (fun (x, y, z) -> y) board
-        y
+    let neighbourhood = [for a in -1..1 do for b in -1..1 -> (a, b)] 
+                        |> List.filter (fun (a, b) -> (a, b) <> (0, 0))
+
+    let addCells (a, b) (c, d) = (a+c, b+d)
+
+    let rows board = board |> List.maxBy fst' |> fst'
+
+    let cols board = board |> List.maxBy snd' |> snd'
 
     let createFor rows columns =
-        
         [for x in 0..(rows - 1) do for y in 0..(columns - 1) -> (x, y, false)]
 
     let addTo board pattern =
+        let isCellAlive a b = pattern |> List.exists (fun (x, y) -> (a, b) = (x, y))
+        board |> List.map (fun (x, y, z) -> (x, y, isCellAlive x y || z))
         
-        board |> List.map
-            (
-                fun (x, y, z) ->
-                    if List.exists (fun (a, b) -> a = x && b = y) pattern
-                    then (x, y, true)
-                    else (x, y, z)
-            )
-        
-    let addCellTo board xy =
-        
-        let a, b = xy
+    let addCellTo board cell =
+        let makeItLive (x, y, z) = (x, y, (x, y) = cell)
+        board |> List.map makeItLive
 
-        board |> List.map
-            (
-                fun (x, y, z) ->
-                if x = a && y = b then (x, y, true) else (x, y, z)
-            )
+    let livingNeighbours (x, y, _) board =
+        let neighbours = neighbourhood |> List.map (addCells (x, y))
 
-    let livingNeighbours (x, y, z) board =
-        
-        board |> List.filter
-            (
-                fun (a, b, c) ->
-                    (x = a - 1 || x = a || x = a + 1) && 
-                    (y = b - 1 || y = b || y = b + 1) && 
-                    (x <> a || y <> b) &&
-                    (c = true)
-            )
+        let isAlive (a, b) = board |> List.exists (fun (x, y, z) -> (x, y, z) = (a, b, true))
+        neighbours |> List.filter isAlive |> List.length
 
     let iterate board =
-        
-        board |> List.map
-            (
-                fun (x, y, isAlive) ->
-                    if isAlive = false
-                    then
-                        match (livingNeighbours (x, y, isAlive) board).Length with
-                            | 3 -> (x, y, true)
-                            | a -> (x, y, false)
-                    else
-                        match (livingNeighbours (x, y, isAlive) board).Length with
-                            | 2 -> (x, y, true)
-                            | 3 -> (x, y, true)
-                            | a -> (x, y, false)
-            )
+        let nextGeneration (x, y, isAlive) =
+            let neighbours = board |> livingNeighbours (x, y, isAlive)
+            match neighbours with
+            | 3 -> (x, y, true)
+            | 2 -> (x, y, isAlive)
+            | _ -> (x, y, false)
 
-    let evolve board turns =
+        board |> List.map nextGeneration
+
+
+    let rec evolve board turns =
         
-        let mutable evolved = board
-        
-        for i = 0 to turns - 1 do
-            evolved <- iterate evolved
-        
-        evolved
+        match turns with
+        | 0 -> board
+        | _ -> evolve (iterate board) (turns - 1)

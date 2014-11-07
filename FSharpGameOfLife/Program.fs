@@ -12,18 +12,15 @@ module Program =
     let mutable response = ""
 
     let choosePattern board num x y =
-        match num with
-        | 1     ->  addTo board (staggeredPattern Block (x, y))
-        | 2     ->  addTo board (staggeredPattern Beehive (x, y))
-        | 3     ->  addTo board (staggeredPattern Loaf (x, y))
-        | 4     ->  addTo board (staggeredPattern Boat (x, y))
-        | 5     ->  addTo board (staggeredPattern Blinker (x, y))
-        | 6     ->  addTo board (staggeredPattern Toad (x, y))
-        | 7     ->  addTo board (staggeredPattern Beacon (x, y))
-        | 8     ->  addTo board (staggeredPattern Pulsar (x, y))
-        | 9     ->  addTo board (staggeredPattern Glider (x, y))
-        | 10    ->  addTo board (staggeredPattern Lightweight (x, y))
-        | a     ->  board
+        let options = [| Block; Beehive; Loaf; Boat; Blinker; Toad; Beacon; Pulsar; Glider; Lightweight |]
+
+        let name = match num with
+                    | x when x >= 1 && x <= options.Length -> Some options.[x - 1]
+                    | _ -> None
+
+        match name with
+        | Some n -> addTo board (n |> toPattern |> adjustTo (x, y))
+        | _ -> board
 
     let parseStringToIntWithLimit x =
         

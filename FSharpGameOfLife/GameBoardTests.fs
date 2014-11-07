@@ -13,13 +13,15 @@ module ``? GameBoard`` =
         let ``Creates a Grid of 10 by 10`` () =
             List.length (createFor 10 10) |> should equal 100
 
+    let aBlock = Block |> toPattern
+
     module ``addTo`` =
         
         [<Test>]
         let ``Returns a Board With a Block Pattern`` () =
             
             let board = createFor 3 3
-            addTo board (basePattern Block) |> should equal
+            addTo board aBlock |> should equal
                 [
                     (00, 00, true );   (00, 01, true );    (00, 02, false);
                     (01, 00, true );   (01, 01, true );    (01, 02, false);
@@ -30,7 +32,9 @@ module ``? GameBoard`` =
         let ``Returns a Board With Two Block Patterns`` () =
             
             let board = createFor 4 4
-            addTo (addTo board (staggeredPattern Block (0, 0))) (staggeredPattern Block (2, 2)) |> should equal
+            let board' = addTo board (aBlock |> adjustTo (0, 0))
+            let board'' = aBlock |> adjustTo (2, 2)
+            addTo board' board'' |> should equal
                 [
                     (00, 00, true );    (00, 01, true );    (00, 02, false);    (00, 03, false);
                     (01, 00, true );    (01, 01, true );    (01, 02, false);    (01, 03, false);
@@ -56,7 +60,7 @@ module ``? GameBoard`` =
             
             [<Test>]
             let ``Remains a Block Pattern`` () =
-                let board = addTo (createFor 2 2) (basePattern Block)
+                let board = addTo (createFor 2 2) aBlock
                 evolve board 1 |> should equal
                     [
                         (00, 00, true );    (00, 01, true );
@@ -64,10 +68,11 @@ module ``? GameBoard`` =
                     ]
 
         module ``Blinker Pattern`` =
-            
+            let aBlinker = Blinker |> toPattern
+
             [<TestCaseSource("alternate")>]
             let ``Changes to Alternate`` iterations =
-                let board = addTo (createFor 3 3) (staggeredPattern Blinker (1, 0))
+                let board = addTo (createFor 3 3) (aBlinker |> adjustTo (1, 0))
                 evolve board iterations |> should equal
                     [
                         (00, 00, false);    (00, 01, true );    (00, 02, false);
@@ -79,7 +84,7 @@ module ``? GameBoard`` =
 
             [<TestCaseSource("original")>]
             let ``Reverts to Original`` iterations =
-                let board = addTo (createFor 3 3) (staggeredPattern Blinker (1, 0))
+                let board = addTo (createFor 3 3) (aBlinker |> adjustTo (1, 0))
                 evolve board iterations |> should equal
                     [
                         (00, 00, false);    (00, 01, false);    (00, 02, false);
@@ -90,10 +95,11 @@ module ``? GameBoard`` =
             let original () = [ [|2|];[|4|];[|6|] ]
 
         module ``Pulsar Pattern`` =
-            
+            let aPulsar = Pulsar |> toPattern
+
             [<TestCaseSource("alternateOne")>]
             let ``Changes to Altenate One`` iterations =
-                let board = addTo (createFor 15 15) (staggeredPattern Pulsar (1, 1))
+                let board = addTo (createFor 15 15) (aPulsar |> adjustTo (1, 1))
                 evolve board iterations |> should equal
                     [
                         (00, 00, false);    (00, 01, false);    (00, 02, false);    (00, 03, false);    (00, 04, true );
