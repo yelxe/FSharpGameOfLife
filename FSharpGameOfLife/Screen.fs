@@ -2,8 +2,6 @@
 
 open System
 open Microsoft.FSharp.Collections
-open Microsoft.FSharp.Reflection
-open Constants
 open Patterns
 open GameBoard
 
@@ -157,18 +155,5 @@ module Screen =
             ConsoleColor.DarkCyan
             ConsoleColor.Cyan
             ["| ";"ENTER";" = Evolve | ";"N";" = Evolve N | ";"A";" = Add Pattern | ";"C";" = Clear Board | ";"Q";" = Quit |"]
-
-        newLine ()
-
-    let showView () =
-        
-        let mutable x = 0
-
-        Console.Clear ()
-        writeLineInColor ConsoleColor.DarkGray message
-        newLine ()
-        
-        for i = 0 to 35 do
-            writeLineInColor ConsoleColor.Gray persistantMessage
 
         newLine ()
