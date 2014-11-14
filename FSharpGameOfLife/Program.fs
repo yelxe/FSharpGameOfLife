@@ -11,6 +11,7 @@ module Program =
     let mutable response = ""
 
     let choosePattern board num x y =
+        
         let options = [| Block; Beehive; Loaf; Boat; Blinker; Toad; Beacon; Pulsar; Glider; Lightweight |]
 
         let name =
@@ -23,6 +24,7 @@ module Program =
         | _ -> board
 
     let parseStringToIntWithLimit x =
+        
         let b, i = Int32.TryParse x
         
         match b with
@@ -34,27 +36,24 @@ module Program =
         
     let cleanAddArguments (resp:string) =
         let args = resp.Split ' '
-        
         let largs = (List.ofArray args) |> List.map (fun x -> if fst (Int32.TryParse x) = true then x else "")
         largs
 
     let doStart () =
-            
         showStart ()
         prompt ()
 
     let doBoard () =
-            
         showBoard board
         prompt ()
 
     let doOptions () =
-            
         showOptions ()
         response <- prompt ()
         doBoard ()
 
     let doAdd () =
+        
         showAdd ()
         response <- prompt ()
 

@@ -42,7 +42,6 @@ module GameBoard =
         board |> List.map nextGeneration
 
     let rec evolve board turns =
-        
         match turns with
         | 0 -> board
         | _ -> evolve (iterate board) (turns - 1)
